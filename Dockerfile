@@ -49,6 +49,18 @@ RUN cd /opt && \
   git clone --depth 1 http://github.com/blankoworld/hymby.git && \
   chown docker hymby/ -R
 
+# Install Makefly as default static weblog engine
+RUN apt-get install -y lua5.1 liblua5.1-filesystem0 liblua5.1-markdown0
+RUN cd /opt/hymby && \
+  git clone --depth 1 http://github.com/blankoworld/makefly.git hosted_engine
+ADD makefly.rc /opt/hymby/hosted_engine/makefly.rc
+
+# Create Hymby's configuration file
+RUN cp /opt/hymby/hymbyrc.example /opt/hymby/hymbyrc
+
+# Change owner of /opt/hymby
+RUN chown docker /opt/hymby -R
+
 # Add tmux configuration for docker user
 ADD tmux.conf /home/docker/.tmux.conf
 # Add vim configuration
